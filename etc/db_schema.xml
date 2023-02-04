@@ -1,0 +1,52 @@
+
+<schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
+   <table name="image_test" resource="default" engine="innodb" comment="MD Helloworld">
+      <column xsi:type="smallint" name="id" padding="7" unsigned="false" nullable="false" identity="true" comment="ID" />
+      <column xsi:type="varchar" name="mobile" nullable="false" length="20" comment="Name" />
+      <column xsi:type="varchar" name="email" nullable="false" length="20" comment="Email" />
+      <column xsi:type="varchar" name="images" nullable="false" length="255" comment="Descrition" />
+      <constraint xsi:type="primary" referenceId="PRIMARY">
+         <column name="id" />
+      </constraint>
+   </table>
+
+   <table name="email_test" resource="default" engine="innodb" comment="MD Helloworld">
+      <column xsi:type="smallint" name="id" padding="7" unsigned="false" nullable="false" identity="true" comment="ID" />
+      <column xsi:type="varchar" name="email" nullable="false" length="20" comment="Email" />
+      <constraint xsi:type="primary" referenceId="PRIMARY">
+         <column name="id" />
+      </constraint>
+   </table><table name="image_upload" resource="default" engine="innodb" comment="MD Helloworld">
+      <column xsi:type="smallint" name="id" padding="7" unsigned="false" nullable="false" identity="true" comment="ID" />
+      <column xsi:type="varchar" name="images" nullable="false" length="255" comment="Descrition" />
+      <constraint xsi:type="primary" referenceId="PRIMARY">
+         <column name="id" />
+      </constraint>
+   </table>
+
+
+
+    <table comment="province Table" engine="innodb" name="province" resource="default">
+        <column comment="Entity Id" identity="true" name="province_id" nullable="false" padding="6" unsigned="false" xsi:type="smallint"/>
+        <column length="255" name="mobile" nullable="true" xsi:type="varchar"/>
+
+        <constraint referenceId="PRIMARY" xsi:type="primary">
+            <column name="province_id"/>
+        </constraint>
+    </table>
+
+    <table comment="City Table" engine="innodb" name="city" resource="default">
+        <column comment="Entity Id" identity="true" name="city_id" nullable="false" padding="6" unsigned="false" xsi:type="smallint"/>
+        <column comment="Province id" identity="false" name="province_id" nullable="false" padding="6" unsigned="false" xsi:type="smallint"/>
+        <column length="255" name="name" nullable="true" xsi:type="varchar"/>
+        <column length="255" name="type" nullable="true" xsi:type="varchar"/>
+
+        <constraint referenceId="PRIMARY" xsi:type="primary">
+            <column name="city_id"/>
+        </constraint>
+
+        <constraint xsi:type="foreign" referenceId="PROVINCE_PROVINCE_ID_CITY_PROVINCE_ID" table="city" column="province_id" referenceTable="province" referenceColumn="province_id"/>
+    </table>
+
+
+</schema>

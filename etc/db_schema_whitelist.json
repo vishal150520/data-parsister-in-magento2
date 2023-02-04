@@ -1,0 +1,75 @@
+{
+    "image_table1": {
+        "column": {
+            "id": true,
+            "mobile": true,
+            "email": true,
+            "images": true
+        },
+        "constraint": {
+            "PRIMARY": true
+        }
+    },
+    "image_table2": {
+        "column": {
+            "pid": true,
+            "id": true,
+            "email": true,
+            "images": true
+        },
+        "constraint": {
+            "PRIMARY": true
+        }
+    },
+    "image_test": {
+        "column": {
+            "id": true,
+            "mobile": true,
+            "email": true,
+            "images": true
+        },
+        "constraint": {
+            "PRIMARY": true
+        }
+    },
+    "province": {
+        "column": {
+            "province_id": true,
+            "name": true,
+            "mobile": true
+        },
+        "constraint": {
+            "PRIMARY": true
+        }
+    },
+    "city": {
+        "column": {
+            "city_id": true,
+            "province_id": true,
+            "name": true,
+            "type": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "CITY_PROVINCE_ID_PROVINCE_PROVINCE_ID": true
+        }
+    },
+    "email_test": {
+        "column": {
+            "id": true,
+            "email": true
+        },
+        "constraint": {
+            "PRIMARY": true
+        }
+    },
+    "image_upload": {
+        "column": {
+            "id": true,
+            "images": true
+        },
+        "constraint": {
+            "PRIMARY": true
+        }
+    }
+}
