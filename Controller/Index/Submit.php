@@ -4,75 +4,88 @@ namespace Bluethink\Test\Controller\Index;
 
 use Magento\Framework\App\Action\Context;
 use Bluethink\Test\Model\ExtensionFactory;
-use Bluethink\Test\Model\ImageFactory;
-use Bluethink\Test\Model\EmailFactory;
-use Bluethink\Test\Model\MobileFactory;
-use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\MediaStorage\Model\File\UploaderFactory;
-use Magento\Framework\Image\AdapterFactory;
-use Magento\Framework\Filesystem;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\App\Request\DataPersistorInterface;
+
 class Submit extends \Magento\Framework\App\Action\Action
 {
-    protected $_test;
-    protected $_Mobile;
-    protected $_image;
-    protected $_Email;
-    protected $uploaderFactory;
-    protected $adapterFactory;
-    protected $filesystem;
+    /**
+    * @var ExtensionFactory
+    */
+    private $_test;
+    
+    /**
+    * @var DataPersistorInterface
+    */
+    private $dataPersistor;
+
 
     public function __construct(
         Context $context,
         ExtensionFactory $test,
-        MobileFactory $image,
-        ImageFactory $Mobile,
-        EmailFactory $Email,
-        UploaderFactory $uploaderFactory,
-        AdapterFactory $adapterFactory,
-        Filesystem $filesystem
+        DataPersistorInterface $dataPersistor
     ) {
         $this->_test = $test;
-        $this->_image= $image;
-        $this->_Mobile= $Mobile;
-        $this->_Email= $Email;
-        $this->uploaderFactory = $uploaderFactory;
-        $this->adapterFactory = $adapterFactory;
-        $this->filesystem = $filesystem;
+        $this->dataPersistor = $dataPersistor;
         parent::__construct($context);
     }
+
     public function execute()
     {
-        $data = $this->getRequest()->getParams();
-        if ($data) {    
-            $variable=$data['images'];
-            $img= implode(",",$data['images']);
-            $data['images']=$img;
-         }
-       
-        
-        $image = $this->_image->create();
-        $image->setData($data);
-        $image->save();
-
-        $Email = $this->_Email->create();
-        $Email->setData($data);
-        $Email->save();
-
-        $Mobile = $this->_Mobile->create();
-        $Mobile->setData($data);
-        $Mobile->save();
-
-        $test = $this->_test->create();
-        $test->setData($data);
-        if($test->save()){
-            $this->messageManager->addSuccessMessage(__('You saved the data.'));
-        }else{
-            $this->messageManager->addErrorMessage(__('Data was not saved.'));
+        if (!$this->getRequest()->isPost()) {
+            return $this->resultRedirectFactory->create()->setPath('*/*/');
         }
-        $resultRedirect = $this->resultRedirectFactory->create();
-        $resultRedirect->setPath('test');
-        return $resultRedirect;
+
+        try{
+            $paramsData = $this->validatedParams();
+
+            $model = $this->_test->create();
+            $saveData = $model->setData($paramsData)->save();
+            if($saveData) {
+                $this->messageManager->addSuccessMessage(__('Thanks for submitting.'));
+                $this->dataPersistor->clear('apply_here');
+            }
+        
+        
+        } catch (LocalizedException $e) {
+            $this->messageManager->addErrorMessage($e->getMessage());
+            $this->dataPersistor->set('apply_here', $this->getRequest()->getParams());
+        
+        } catch (\Exception $e) {
+            
+            $this->messageManager->addErrorMessage(__('An error occurred.'));
+            $this->dataPersistor->set('apply_here', $this->getRequest()->getParams());
+        }
+        return $this->resultRedirectFactory->create()->setPath('test/index');
     }
+
+        
+    
+
+
+    /**
+    * Method to validated params.
+    *
+    * @return array
+    * @throws \Exception
+    */
+
+    private function validatedParams()
+    {
+        $request = $this->getRequest();
+
+        if (trim($request->getParam('name', '')) === '') {
+            throw new LocalizedException(__('Enter the Name and try again.'));
+        }
+        if (\strpos($request->getParam('email', ''), '@') === false) {
+            throw new LocalizedException(__('email address invalid. pls try again.'));
+        }
+        if (trim($request->getParam('telephone', '')) === '') {
+            throw new LocalizedException(__('Enter the Telephone and try again.'));
+        }
+        return $request->getParams();
+    }
+        
 }
 
 

@@ -1,9 +1,10 @@
+<?php
+$viewModel = $block->getViewModel();
+?>
 <div class="row">
     <div class="col-md-8">
         <form name="addData" method="post" id="addData" class="form"
-              action="<?php echo $block->getFormAction(); ?>"
-              data-hasrequired="<?= $block->escapeHtmlAttr(__('* Required Fields')) ?>"
-              data-mage-init='{"validation":{}}'>
+              action="<?php echo $block->getFormAction(); ?>">
             <fieldset class="fieldset">
                 <legend class="legend"><span><?= $block->escapeHtmlAttr(__('Fill Detail')) ?></span></legend>
                 <fieldset class="fieldset row">
@@ -11,24 +12,22 @@
                        
                         <div class="field name required">
                             <label class="label" for="title"><span><?= $block->
-                                escapeHtmlAttr(__('Mobile')) ?></span></label>
+                                escapeHtmlAttr(__('Name')) ?></span></label>
                             <div class="">
-                                <input name="mobile" id="mobile" title="Mobile" value="" class="input-text" type="text"
-                                       data-validate="{required:true}">
+                                <input name="name" id="name" value="<?= $block->escapeHtmlAttr($viewModel->getUserName()) ?>" class="input-text" type="text">
                             </div>
                         </div>
                         <div class="field name required">
                             <label class="label" for="title"><span><?= $block->escapeHtmlAttr(__('Email')) ?></span></label>
                             <div class="control">
-                                <input name="email" id="phone" title="phone" value="" class="input-text"
-                                       type="text" data-validate="{required:true}">
+                                <input name="email" id="email" value="<?= $block->escapeHtmlAttr($viewModel->getUserEmail()) ?>" class="input-text"
+                                       type="text">
                             </div>
                         </div>
-                        <div class="field name required">
-                            <label class="label" for="title"><span><?= $block->escapeHtmlAttr(__('Image')) ?></span></label>
+                        <div class="field telephone required">
+                            <label class="label" for="title"><span><?= $block->escapeHtmlAttr(__('Telephone')) ?></span></label>
                             <div class="control">
-                                <input name="images[]" multiple id="image" title="Image" value="" class="file"
-                                       type="file" data-validate="{required:true}">
+                        <input name="telephone" id="telephone" value="<?= $block->escapeHtmlAttr($viewModel->getUserTelephone()) ?>" class="input-text" type="text">
                             </div>
                         </div>
                     </div>
@@ -44,3 +43,12 @@
      
     </div>
 </div> 
+<script type="text/x-magento-init">
+{
+"*": {
+"Magento_Customer/js/block-submit-on-send": {
+"formId": "jobapply-form"
+}
+}
+}
+</script>

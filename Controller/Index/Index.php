@@ -20,7 +20,6 @@
          
 
    
-       
         $resultPage = $this->_pageFactory->create(); 
        return $resultPage; 
     }
